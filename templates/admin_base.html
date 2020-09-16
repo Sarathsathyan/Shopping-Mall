@@ -1,0 +1,56 @@
+{% load static %}
+{#Base file#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="shortcut icon" href="/static/images/favicon.png" type="image/x-icon">
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Ecart - ADmin ">
+    {% block extrahead %}
+    {% endblock %}
+    <!-- CSS ================================================== -->
+    <link rel="stylesheet" href="{% static 'admincss/style.css' %}">
+    <link rel="stylesheet" href="{% static 'admincss/night-mode.css' %}">
+    <link rel="stylesheet" href="{% static 'admincss/framework.css' %}">
+    <link rel="stylesheet" href="{% static 'admincss/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'admincss/button-style.css' %}">
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" href="{% static 'admincss/icons.css' %}">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Bowlby+One" />
+
+	 <!-- video js new code -->
+
+   <link rel = "stylesheet" href ="{% static 'admincss/video-js.min.css' %}">
+<script src="{% static 'adminjs/video.js' %}"></script>
+<script src="{% static 'adminjs/Youtube.js' %}"></script>
+
+
+<script src ="{% static 'adminjs/courses.js' %}"></script>
+
+
+</head>
+<body>
+<!-- Body -->
+
+{% block content %}
+
+
+{% endblock %}
+
+
+<script src="{% static 'adminjs/framework.js' %}"></script>
+<script src="{% static 'adminjs/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'adminjs/simplebar.js' %}"></script>
+<script src="{% static 'adminjs/main.js' %}"></script>
+<script src="{% static 'adminjs/bootstrap-select.min.js' %}"></script>
+
+
+
+
+</body>
+</html>

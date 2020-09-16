@@ -1,5 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load static %}
 {% block content %}
+
+
     <!-- slider Area Start-->
     {% include 'partials/_header/_header.html' %}
     <!--================login_part Area =================-->
@@ -8,18 +10,19 @@
 
         <div class="container">
             <div class="row ">
+                 <form class="row contact_form" method="post" enctype="multipart/form-data">{% csrf_token %}
 
                 <div class="col-lg-6">
                     <div class="login_part_text" style="height: 150px">
                         <div>
                             <div class="col-md-12 form-group p_star">
-                                    Product Image 1:  <input type="file" name="pro1" >
+                                    Product Image 1:  <input type="file" name="img1" required>
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                    Product Image 2:  <input type="file" name="pro2" >
+                                    Product Image 2:  <input type="file" name="img2" >
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                    Product Image 3:(optional)  <input type="file" name="pro3" >
+                                    Product Image 3:(optional)  <input type="file" name="img3" >
                             </div>
                         </div>
                     </div>
@@ -28,14 +31,25 @@
                     <div class="login_part_form"style="height: 0px">
                         <div class="login_part_form_iner" >
                             <h4>Add your Products ! <br></h4>
-                            <form class="row contact_form" method="post">{% csrf_token %}
+                            <div class="col-md-12 form-group p_star">
+                                  <select name="cmp_name" class="uk-select" required>
+                                            <option disabled selected value>Choose Company</option>
+                                            {% for cag in comp_list %}
+                                            <option value="{{cag.shop_name}}">{{cag.shop_name}}</option>
+                                            {% endfor %}
+                                  </select>
+                            </div>
                                  <div class="col-md-12 form-group p_star">
                                     <input type="text" class="form-control"  name="pro_name"
-                                        placeholder="Product Name">
+                                        placeholder="Product Name" required>
                                  </div>
                                  <div class="col-md-12 form-group p_star">
                                     <input type="text" class="form-control"  name="descrip"
-                                        placeholder="Product Description">
+                                        placeholder="Product Description" required>
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="numbe" class="form-control"  name="price"
+                                        placeholder="Product Price" required>
                                 </div>
                                 <div class="col-md-12 form-group">
 
@@ -43,10 +57,11 @@
                                         Add Product
                                     </button>
                                 </div>
-                            </form>
+
                         </div>
                     </div>
                 </div>
+                 </form>
             </div>
         </div>
     </section>
