@@ -2,7 +2,9 @@
 {% block content %}
 
 {% load static %}
+
     <header>
+
         <!-- Header Start -->
        <div class="header-area">
             <div class="main-header ">
@@ -37,7 +39,7 @@
                             <!-- Logo -->
                             <div class="col-xl-1 col-lg-1 col-md-1 col-sm-3">
                                 <div class="logo">
-                                  <a href="index.html"><img src="{% static 'img/logo/logo.png' %}" alt=""></a>
+                                  <a href="#"><img src="{% static 'img/logo/logo.png' %}" alt=""></a>
                                 </div>
                             </div>
                             <div class="col-xl-6 col-lg-8 col-md-7 col-sm-5">
@@ -45,7 +47,7 @@
                                 <div class="main-menu f-right d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">
-                                            <li><a href="{% url 'index' %}">Home</a></li>
+                                            <li><a href="#">Home</a></li>
                                             {% if user.is_authenticated %}
                                             <li ><a href="#">Latest</a>
                                                 <ul class="submenu">
@@ -72,7 +74,7 @@
 {#                                                    <li><a href="checkout.html">Product Checkout</a></li>#}
 {#                                                </ul>#}
 {#                                            </li>#}
-                                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                                            <li><a href="#">Contact</a></li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -87,18 +89,18 @@
                                             </div>
                                         </div>
                                      </li>
-{#                                    <li class=" d-none d-xl-block">#}
-{#                                        <div class="favorit-items">#}
-{#                                            <i class="far fa-heart"></i>#}
-{#                                        </div>#}
-{#                                    </li>#}
-{#                                    <li>#}
-{#                                        <div class="shopping-card">#}
-{#                                            <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>#}
-{#                                        </div>#}
-{#                                    </li>#}
+                                    <li class=" d-none d-xl-block">
+                                        <div class="favorit-items">
+                                            <i class="far fa-heart"></i>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="shopping-card crd" style=".shopping-card::before=content:12 ">
+                                            <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                                        </div>
+                                    </li>
                                     {% if not user.is_authenticated %}
-                                   <li class="d-none d-lg-block"> <a href="{% url 'register' %}" class="btn header-btn">Sign in</a></li>
+                                   <li class="d-none d-lg-block"> <a href="#" class="btn header-btn">Sign in</a></li>
                                     {% endif %}
                                 </ul>
                             </div>

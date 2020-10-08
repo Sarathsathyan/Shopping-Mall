@@ -1,0 +1,137 @@
+{% extends 'admin_base.html' %}
+
+
+{% block content %}
+
+    <div id="wrapper">
+        <div class="page-content mt-5 pt-5">
+
+            <div class="container">
+                {% include 'partials/_alerts.html' %}
+
+                {% if not user.is_authenticated %}
+                    <h4 style="color: red;font-weight: bold">Login to continue : <a href="{% url 'login' %}">Login</a>
+                    </h4>
+                {% endif %}
+
+                <div uk-grid>
+                    <div class="uk-width-3-4@m">
+
+                        <div class="blog-post single-post">
+
+                            <!-- Blog Post Thumbnail -->
+                            <div class="blog-post-thumbnail">
+                                <div class="blog-post-thumbnail-inner">
+                                    {% if product.pro_image %}
+                                        <img src="{{ product.pro_image.url }}" alt="">
+                                    {% else %}
+                                        <img src="" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+                            <!-- Blog Post Content -->
+                            <div class="blog-post-content">
+
+                                <h3> {{ product.pro_name }} </h3>
+                                <p>{{ product.pro_description }}</p>
+
+                                <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p">
+                                    Add to cart
+                                    <i class="fas fa-shopping-cart ml-1"></i>
+                                </a>
+                                <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p">
+                                    Remove from cart
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        <h4>Company Info </h4>
+
+                        <div class="uk-card-default rounded px-3 pb-md-3"
+                             uk-toggle="cls: uk-flex uk-flex-between@m uk-flex-middle; mode: media; media: @m">
+                            <div class="user-details-card">
+                                <div class="user-details-card-avatar">
+                                    <img src="../assets/images/avatars/avatar-2.jpg" alt="">
+                                </div>
+                                <div class="user-details-card-name">
+                                    Ecart <span> Shopping <span> </span> </span>
+                                </div>
+                            </div>
+                            <div>
+                                <strong class="mx-3 uk-visible@s"> Share on </strong>
+
+                                <a href="#" class="btn btn-facebook  rounded-circle btn-icon-only transition-3d-hover">
+                            <span class="btn-inner--icon">
+                                <i class="icon-brand-facebook-f"></i>
+                            </span>
+                                </a>
+
+                                <a href="#" class="btn btn-twitter rounded-circle btn-icon-only transition-3d-hover">
+                            <span class="btn-inner--icon">
+                                <i class="icon-brand-twitter"></i>
+                            </span>
+                                </a>
+
+                                <a href="#"
+                                   class="btn btn-google-plus rounded-circle btn-icon-only transition-3d-hover">
+                            <span class="btn-inner--icon">
+                                <i class="icon-brand-google-plus-g"></i>
+                            </span>
+                                </a>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="uk-width-1-4@m">
+
+                        <h4> Product Information</h4>
+                        <a href="#">
+                            <div class="uk-card-default mb-4 rounded animate-this uk-inline-clip">
+                                <img src="../assets/images/blog/img-1.jpg" alt="">
+                                <div class="p-3">
+                                    <p class="mb-2"> Product Category : {{ product.pro_category }}</p>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#">
+                            <div class="uk-card-default mb-4 rounded animate-this uk-inline-clip">
+                                <img src="../assets/images/blog/img-2.jpg" alt="">
+                                <div class="p-3">
+                                    <p class="mb-2"> Sub category : {{ product.pro_sub }} </p>
+                                </div>
+                            </div>
+                        </a>
+
+
+                        <form method="post">{% csrf_token %}
+                            <div class="uk-card-default mb-4 rounded animate-this uk-inline-clip">
+
+                                <div class="p-3">
+                                    <p style="font-weight: bold;color: #0a2319">Submit your review about product</p>
+                                    <input type="text" name="review" placeholder="Enter your review here">
+                                </div>
+                                <input type="submit" class="btn btn-success" name="review_sub" value="Submit">
+                            </div>
+                        </form>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

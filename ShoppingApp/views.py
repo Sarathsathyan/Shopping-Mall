@@ -12,12 +12,20 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from ShoppingMachine.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail, EmailMessage
-
-from .models import CompanyInfo,ProductDetail,RoleDetail
+from django.views.generic import ListView, DetailView, View
+from .models import CompanyInfo,ProductDetail,RoleDetail,CareerCategory,Category_role,UserReviews
 # Create your views here.
 
-def index(request):
-    return render(request,'main_pages/index.html')
+class index(ListView):
+    model = ProductDetail
+    template_name = 'main_pages/index.html'
+
+# def index(request):
+#     products = ProductDetail.objects.all()
+#     context ={
+#         'products':products,
+#     }
+#     return render(request,'main_pages/index.html',context)
 
 def register(request):
     if request.method =='POST':
@@ -140,17 +148,37 @@ def ProductList(request,id):
     }
     return render(request,'client_pages/productList.html',context)
 
-def SingleProduct(request,id):
-    print(id)
-    product_info = ProductDetail.objects.get(id = id)
-    context={
-        'pro_info':product_info,
-    }
-    print(product_info.pro_image1)
-    return render(request,'client_pages/single_product.html',context)
+class SingleProduct(DetailView):
+    model = ProductDetail
+    template_name = 'client_pages/single_product.html'
+
+# def SingleProduct(request,id):
+#
+#     product_info = ProductDetail.objects.get(id = id)
+#     context={
+#         'pro_info':product_info,
+#     }
+#     print(product_info.pro_image1)
+#     return render(request,'client_pages/single_product.html',context)
 
 def Contact(request):
     return render(request,'main_pages/contact.html')
+
+# User section
+def ViewProduct(request,id):
+    user = request.user
+    if request.method == 'POST':
+        if 'review_sub' in request.POST:
+            review = request.POST['review']
+            print(user.email)
+            data = UserReviews(product_id_id=id,user_name=user.first_name,user_email=user.email,review=review)
+            data.save()
+            messages.success(request,"Submitted successfully")
+    product = ProductDetail.objects.get(id=id)
+    context ={
+        'product':product
+    }
+    return render(request,'main_pages/product_info.html',context)
 
 
 
@@ -267,3 +295,190 @@ def AdminRole(request):
         return redirect('logout')
 
     return render(request,'admin_section/role_creation.html')
+
+
+def Category(request):
+    if request.method=='POST':
+        if 'category_submit' in request.POST:
+            cag_name=request.POST['cagname']
+
+            if CareerCategory.objects.filter(category=cag_name).exists():
+                messages.error(request, 'The Category already exists')
+                return redirect('category-create')
+
+            if CareerCategory.objects.filter(category=cag_name.upper()).exists():
+                messages.error(request, 'The Category already exists')
+                return redirect('category-create')
+
+            if CareerCategory.objects.filter(category=cag_name.lower()).exists():
+                messages.error(request, 'The Category already exists')
+                return redirect('category-create')
+
+            if CareerCategory.objects.filter(category=cag_name.capitalize()).exists():
+                messages.error(request, 'The Category already exists')
+                return redirect('category-create')
+
+
+            category_id=CareerCategory.objects.all().count()+1
+            cag_obj=CareerCategory(category_id=category_id,category=cag_name)
+            cag_obj.save()
+
+            return redirect('category-create')
+
+
+        if 'cfp_submit' in request.POST:
+            cfp_category=request.POST['cat_cag']
+            cfp_role=request.POST['cat_sub']
+
+            cfp_id=Category_role.objects.all().count()+1
+            cfp_obj=Category_role(cat_id=cfp_id,cat_category=cfp_category,cat_sub=cfp_role)
+            cfp_obj.save()
+            messages.success(request, "Added to Category")
+            return redirect('category-create')
+
+
+    category_list=CareerCategory.objects.all()
+
+    cfp_list=Category_role.objects.order_by("-cat_create_date")
+
+    context={
+        'category_list':category_list,
+        'cfp_list':cfp_list,
+    }
+    return render(request,'admin_section/category-create.html',context)
+
+def category_edit(request,id):
+    category_id=id
+    datas=CareerCategory.objects.get(category_id=category_id)
+    name=datas.category
+
+    if request.method=="POST":
+        if 'category_submit' in request.POST:
+            category=request.POST['category_name']
+
+            datas=CareerCategory.objects.get(category_id=category_id)
+
+            datas.category=category
+            datas.save()
+
+            Category_role.objects.filter(cat_category=name).update(cat_category=category)
+            return redirect('category-create')
+
+    context={
+        'datas':datas,
+    }
+    return render(request,'admin_section/category-edit.html',context)
+
+def SubEdit(request,id):
+    cfp_id=id
+    print(cfp_id)
+    datas=Category_role.objects.get(id=cfp_id)
+
+    if request.method=="POST":
+        if 'cfp_submit' in request.POST:
+            cfp_category=request.POST['cfp_cag']
+            cfp_role=request.POST['cfp_role']
+
+            datas=Category_role.objects.get(cat_id=cfp_id)
+            datas.cat_category=cfp_category
+            datas.cat_sub=cfp_role
+            datas.save()
+
+            return redirect('category-create')
+
+        if 'cfp_delete' in request.POST:
+            delete_id=request.POST['delete_id']
+            obj=Category_role.objects.filter(cat_id=delete_id)
+            obj.delete()
+
+            return redirect('category-create')
+
+
+    category_list=CareerCategory.objects.all()
+
+    role_str=datas.cat_sub
+    role_list=role_str.split('_')
+    context={
+        'datas':datas,
+        'role_list':role_list,
+        'category_list':category_list,
+    }
+
+    return render(request,'admin_section/sub-category-edit.html',context)
+
+def AdminProducts(request):
+    pro_detail = ProductDetail.objects.all()
+
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            del_id = request.POST['del_id']
+            if ProductDetail.objects.filter(id=del_id).exists():
+
+                roled = ProductDetail.objects.get(id=del_id).delete()
+
+                messages.success(request, "Deleted success")
+            else:
+                messages.error(request, "Some error occured")
+            return redirect('productDetails')
+
+
+    context ={
+        'pro_detail':pro_detail,
+    }
+
+    return render(request,'admin_section/product-detail.html',context)
+
+def AdminAddProduct(request):
+
+    if request.method == 'POST':
+        pro_category = request.POST['category']
+        pro_sub = request.POST['sub_cat']
+        pro_name = request.POST['pro_name']
+        pro_description = request.POST['descrip']
+        img1 = request.FILES.get('img1')
+        pro_price = request.POST['pro_price']
+        pro_rating = request.POST['rating']
+
+        data = ProductDetail(pro_name = pro_name,pro_category=pro_category,pro_sub=pro_sub,
+                             pro_description=pro_description,pro_image=img1,pro_rating=pro_rating,
+                             pro_price=pro_price)
+        data.save()
+        messages.success(request,"Submitted successfully")
+    category_list=CareerCategory.objects.all()
+
+    cfp_list=Category_role.objects.order_by("-cat_create_date")
+    context={
+        'category_list':category_list,
+        'cfp_list':cfp_list,
+    }
+
+
+    return render(request,'admin_section/add-product.html',context)
+
+def ProductReview(request,id):
+    data = ProductDetail.objects.get(id=id)
+    reviews = UserReviews.objects.filter(product_id_id=data.pk)
+    context ={
+        'reviews':reviews,
+        'data' : data,
+    }
+    return render(request,'admin_section/product_review_detail.html',context)
+
+def CustomerReviewInfo(request,id):
+
+    data = UserReviews.objects.get(id = id)
+    context ={
+        'data':data
+    }
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        msg = request.POST['message']
+
+
+        mail_subject = "Clarification for the review"
+        message = f'Hi,{data.user_name} thanks for your valuable feedback, {msg}'
+        email = EmailMessage(mail_subject, message, from_email=EMAIL_HOST_USER, to=[email, ])
+        email.send()
+        messages.success(request,"Email send successfully")
+    return render(request,'admin_section/customer_review_info.html',context)

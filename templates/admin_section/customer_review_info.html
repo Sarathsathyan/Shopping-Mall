@@ -1,0 +1,71 @@
+{% extends 'admin_base.html' %}
+{% block title %}
+    Customer Info
+{% endblock %}
+{% block content %}
+
+    <div id="wrapper" class="admin-panel">
+
+        {% include 'partials/admin_partials/_header.html' %}
+
+        <div class="page-content">
+            <div class="page-content-inner">
+
+                <div class="d-flex">
+                    <nav id="breadcrumbs" class="mb-3">
+                        <ul>
+                            <li> Customer Info</li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="">
+                    {% include 'partials/_alerts.html' %}
+                    <div class="card rounded">
+                        <div class=" py-2 ">
+                            <h4 class="mb-0 mx-3">Customer Information - Contact Customer</h4>
+                        </div>
+                        <hr class="m-0">
+                        <div class="container py-3 uk-width-expand">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <fieldset class="uk-fieldset">
+                                    <div class="uk-margin">
+                                        <div class="uk-inline d-flex">
+                                            <div class="mt-1 uk-width-expand">
+                                                Name <input class="uk-input bg-secondary uk-width-expand" name="name"
+                                                            type="text" value="{{ data.user_name }}" required>
+                                            </div>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div class="mt-1 uk-width-expand">
+                                                Email <input class="uk-input bg-secondary uk-width-expand" name="email"
+                                                             type="text" value="{{ data.user_email }}" required>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="uk-margin">
+                                        Message <textarea id="w3review" name="message" rows="3" cols="50">
+                                          </textarea>
+                                    </div>
+
+
+                                    <div class="text-center">
+                                        <button class="btn btn-default" name="create">Send message</button>
+                                    </div>
+
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

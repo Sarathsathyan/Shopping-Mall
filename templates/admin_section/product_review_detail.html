@@ -1,0 +1,103 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+    <body>
+
+
+    <div id="wrapper" class="admin-panel">
+
+        {% include 'partials/admin_partials/_header.html' %}
+
+
+
+
+        <div class="page-content mt-5 pt-5">
+
+            <div class="container">
+
+                <div uk-grid>
+                    <div class="uk-width-3-4@m">
+
+                        <div class="blog-post single-post">
+
+                            <!-- Blog Post Thumbnail -->
+                            <div class="blog-post-thumbnail">
+                                <div class="blog-post-thumbnail-inner">
+                                    {% if data.pro_name %}
+                                        <img src="{{ data.pro_image.url }}" alt="">
+                                    {% else %}
+                                        <img src="" alt="">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="blog-post-content">
+
+                                <h3> {{ data.pro_name }} </h3>
+                                <div class="mb-2">
+                                    <a href="#" class="blog-post-info">{{ data.pro_rating }}</a>
+                                </div>
+
+                                <p>{{ data.pro_description | safe }}</p>
+
+
+                            </div>
+
+                        </div>
+                    <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product</th>
+      <th scope="col">Positive feedback</th>
+      <th scope="col">Negative feedback</th>
+      <th scope="col">Overall rating </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td>Product name</td>
+      <td>feedback</td>
+      <td>feedback</td>
+      <td>raing</td>
+    </tr>
+
+  </tbody>
+</table>
+                    </div>
+
+                    <div class="uk-width-1-4@m">
+
+                        <h4> Customer reactions</h4>
+                        {% if reviews %}
+                            {% for i in reviews %}
+                        <a href="{% url 'CustomerInfo' i.pk %}">
+                            <div class="uk-card-default mb-4 rounded animate-this">
+
+                                <div class="p-4">
+                                    <p class="mb-2"> {{ i.review }} </p>
+                                    <p>By : {{ i.user_name }}</p>
+                                </div>
+                            </div>
+                        </a>
+                            {% endfor %}
+                        {% endif %}
+
+
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    </body>
+{% endblock %}
