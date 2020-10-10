@@ -12,20 +12,16 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from ShoppingMachine.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail, EmailMessage
-from django.views.generic import ListView, DetailView, View
+
 from .models import CompanyInfo,ProductDetail,RoleDetail,CareerCategory,Category_role,UserReviews
 # Create your views here.
 
-class index(ListView):
-    model = ProductDetail
-    template_name = 'main_pages/index.html'
-
-# def index(request):
-#     products = ProductDetail.objects.all()
-#     context ={
-#         'products':products,
-#     }
-#     return render(request,'main_pages/index.html',context)
+def index(request):
+    products = ProductDetail.objects.all()
+    context ={
+        'products':products,
+    }
+    return render(request,'main_pages/index.html',context)
 
 def register(request):
     if request.method =='POST':
@@ -148,18 +144,14 @@ def ProductList(request,id):
     }
     return render(request,'client_pages/productList.html',context)
 
-class SingleProduct(DetailView):
-    model = ProductDetail
-    template_name = 'client_pages/single_product.html'
+def SingleProduct(request,id):
 
-# def SingleProduct(request,id):
-#
-#     product_info = ProductDetail.objects.get(id = id)
-#     context={
-#         'pro_info':product_info,
-#     }
-#     print(product_info.pro_image1)
-#     return render(request,'client_pages/single_product.html',context)
+    product_info = ProductDetail.objects.get(id = id)
+    context={
+        'pro_info':product_info,
+    }
+    print(product_info.pro_image1)
+    return render(request,'client_pages/single_product.html',context)
 
 def Contact(request):
     return render(request,'main_pages/contact.html')
@@ -482,3 +474,8 @@ def CustomerReviewInfo(request,id):
         email.send()
         messages.success(request,"Email send successfully")
     return render(request,'admin_section/customer_review_info.html',context)
+
+
+def OrderSummary(request,id):
+    print(id)
+    return render(request,'main_pages/order_summary.html')
