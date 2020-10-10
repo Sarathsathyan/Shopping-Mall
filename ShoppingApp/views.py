@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import render
-
+from . import Dataset
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import auth
 from django.contrib import messages
@@ -14,6 +14,8 @@ from ShoppingMachine.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail, EmailMessage
 
 from .models import CompanyInfo,ProductDetail,RoleDetail,CareerCategory,Category_role,UserReviews
+
+
 # Create your views here.
 
 def index(request):
